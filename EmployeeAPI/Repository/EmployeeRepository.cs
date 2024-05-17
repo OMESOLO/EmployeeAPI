@@ -26,6 +26,7 @@ namespace EmployeeAPI.Repository
                                   emp.Gender,
                                   DepartmentName = dept.DepartmentName,
                                   ProjectName = proj.ProjectName,
+
       
                                   
                               }).ToListAsync<object>();
@@ -59,7 +60,7 @@ namespace EmployeeAPI.Repository
             var data = await (from emp in _context.Employees
                                 join dept in _context.Departments on emp.DepartmentID equals dept.DepartmentID
                               join project in _context.Projects on dept.DepartmentID equals project.DepartmentID
-                              where emp.FirstName.Contains(searchTerm) || emp.LastName.Contains(searchTerm) || emp.Email.Contains(searchTerm) || dept.DepartmentName.Contains(searchTerm) || project.ProjectName.Contains(searchTerm)
+                              where emp.FirstName.Contains(searchTerm) || emp.LastName.Contains(searchTerm) || emp.Email.Contains(searchTerm) || dept.DepartmentName.Contains(searchTerm) || project.ProjectName.Contains(searchTerm) || string.IsNullOrEmpty(searchTerm)
                               select new
                                 {
                                     emp.FirstName,
@@ -67,7 +68,11 @@ namespace EmployeeAPI.Repository
                                     emp.Email,
                                     emp.Gender,                       
                                     DepartmentName = dept.DepartmentName,
-                                    ProjectName = project.ProjectName
+                                    ProjectName = project.ProjectName,
+                                    startdate = project.StartDate != null ? project.StartDate.ToString("dd/mm/yyyy") : null,
+                                    enddate = project.EndDate != null ? project.EndDate.ToString("dd/mm/yyyy") : null,
+
+                                  
 
                               }).ToListAsync<object>();
             return data;
