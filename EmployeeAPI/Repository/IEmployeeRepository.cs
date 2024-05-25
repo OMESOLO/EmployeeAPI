@@ -9,7 +9,9 @@ namespace EmployeeAPI.Repository
         Task<Employee> DeleteEmployee(int employeeId);
         Task<List<object>> SearchEmployee(string searchTerm);
         Task<Employee> UpdateEmployee(Employee employee);
- 
+        
+
+
 
     }
 }
