@@ -81,11 +81,11 @@ namespace EmployeeAPI.Repository
             return department;
         }
 
-        public async Task AddDepartment(Department addDepartment)
-        {
+        public async Task<Department> AddDepartment(Department addDepartment)
+        {   
             _context.Departments.Add(addDepartment);
             await _context.SaveChangesAsync();
-            
+            return addDepartment;
         }
 
     }

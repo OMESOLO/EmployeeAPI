@@ -66,10 +66,7 @@ namespace EmployeeAPI.Controllers
         [HttpPost("AddDepartment")]
         public async Task<ActionResult> AddDepartment(Department addDepartment)
         {
-            if (string.IsNullOrEmpty(addDepartment.DepartmentName))
-            {
-                return BadRequest("Please Enter DepartmentName");
-            }
+            
 
             await _departmentService.AddDepartment(addDepartment);
             return Ok("Successfully");
