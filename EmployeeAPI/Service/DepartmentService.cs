@@ -36,9 +36,9 @@ namespace EmployeeAPI.Service
             return result;
         }
 
-        public async Task<Department> UpdateDepartment(Department department)
+        public async Task<Department> UpdateDepartment(int id, Department department)
         {
-            var updatedepartment = await _departmentRepository.UpdateDepartment(department);
+            var updatedepartment = await _departmentRepository.UpdateDepartment(id, department);
             return updatedepartment;
         }
 

@@ -34,7 +34,7 @@ namespace EmployeeAPI.Controllers
             return Ok(result);
         }
 
-        [HttpDelete("DeleteDepartment")]
+        [HttpDelete("DeleteDepartment/{departmentID}")]
         public async Task<ActionResult<Department>> DeleteDepartment(int departmentID)
         {
             var deletedDepartment = await _departmentService.DeleteDepartment(departmentID);
@@ -45,6 +45,8 @@ namespace EmployeeAPI.Controllers
             return Ok(deletedDepartment);
         }
 
+
+
         [HttpGet("SearchDepartment")]
         public async Task<ActionResult<List<object>>> SearchDepartment(string searchdep)
         {
@@ -52,19 +54,27 @@ namespace EmployeeAPI.Controllers
             return result.Count > 0 ? Ok(result) : NotFound("Department Not Found");
         }
 
-        [HttpPut("UpdateDepartment")]
-        public async Task<ActionResult<Department>> UpdateDepartment(Department department)
+        [HttpPut("UpdateDepartment/{id}")]
+        public async Task<ActionResult<Department>> UpdateDepartment(int id, Department department)
         {
-            var updatedepartment = await _departmentService.UpdateDepartment(department);
-            if (updatedepartment == null)
+            if (id != department.DepartmentID)
+            {
+                return BadRequest();
+            }
+
+            var updatedDepartment = await _departmentService.UpdateDepartment(id, department);
+            if (updatedDepartment == null)
             {
                 return NotFound();
             }
-            return Ok(updatedepartment);
+
+            return Ok(updatedDepartment);
         }
 
+
+
         [HttpPost("AddDepartment")]
-        public async Task<ActionResult> AddDepartment(Department addDepartment)
+        public async Task<ActionResult<Department>> AddDepartment(Department addDepartment)
         {
             
 

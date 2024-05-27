@@ -69,17 +69,25 @@ namespace EmployeeAPI.Repository
             return data;
         }
 
-        public async Task<Department> UpdateDepartment(Department department)
+        public async Task<Department> UpdateDepartment(int id, Department department)
         {
-            var updept = await _context.Departments.FindAsync(department.DepartmentID);
+            var updept = await _context.Departments.FindAsync(id);
+
+            if (updept == null)
+            {
+                return null;
+            }
 
             updept.DepartmentName = department.DepartmentName;
             updept.ManagerID = department.ManagerID;
 
-            _context.Entry(updept).State = EntityState.Modified;
+        
             await _context.SaveChangesAsync();
+
             return department;
         }
+
+
 
         public async Task<Department> AddDepartment(Department addDepartment)
         {   

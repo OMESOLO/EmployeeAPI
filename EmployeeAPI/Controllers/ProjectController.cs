@@ -33,16 +33,17 @@ namespace EmployeeAPI.Controllers
             return Ok(addProject);
         }
 
-        [HttpDelete("DeleteProject")]
-        public async Task<ActionResult<Project>> DeleteProject(int id)
+        [HttpDelete("DeleteProject/{projectId}")]
+        public async Task<ActionResult<Project>> DeleteProject(int projectId)
         {
-            var deletedProject = await _projectService.DeleteProject(id);
+            var deletedProject = await _projectService.DeleteProject(projectId);
             if (deletedProject == null)
             {
                 return NotFound();
             }
             return Ok(deletedProject);
         }
+
 
         [HttpGet("SearchProject")]
         public async Task<ActionResult<List<object>>> SearchProjects(string searchpro)

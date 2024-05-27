@@ -1,18 +1,19 @@
 ﻿using EmployeeAPI.Data;
 using EmployeeAPI.Entity;
 using Microsoft.EntityFrameworkCore;
-using System.Transactions;
 
 namespace EmployeeAPI.Repository
 {
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly DataContext _context;
+
         public EmployeeRepository(DataContext context)
         {
             _context = context;
         }
-        //GetEmployee
+
+        // GetEmployee
         public async Task<List<object>> GetEmployeeList()
         {
             var data = await (from emp in _context.Employees
@@ -24,16 +25,15 @@ namespace EmployeeAPI.Repository
                                   emp.LastName,
                                   emp.Email,
                                   emp.Gender,
+                                  emp.JobTitle,
                                   DepartmentName = dept.DepartmentName,
                                   ProjectName = proj.ProjectName,
-
-      
-                                  
+                                  StartDate = proj.StartDate.HasValue ? proj.StartDate.Value.ToString("dd/MM/yyyy") : null,
+                                  EndDate = proj.EndDate.HasValue ? proj.EndDate.Value.ToString("dd/MM/yyyy") : null
                               }).ToListAsync<object>();
             return data;
-                
         }
-        
+
         public async Task<Employee> AddEmployee(Employee employee)
         {
             _context.Employees.Add(employee);
@@ -51,33 +51,34 @@ namespace EmployeeAPI.Repository
 
             _context.Employees.Remove(employee);
             await _context.SaveChangesAsync();
-
             return employee;
         }
 
         public async Task<List<object>> SearchEmployee(string searchTerm)
         {
             var data = await (from emp in _context.Employees
-                                join dept in _context.Departments on emp.DepartmentID equals dept.DepartmentID
+                              join dept in _context.Departments on emp.DepartmentID equals dept.DepartmentID
                               join project in _context.Projects on dept.DepartmentID equals project.DepartmentID
-                              where emp.FirstName.Contains(searchTerm) || emp.LastName.Contains(searchTerm) || emp.Email.Contains(searchTerm) || dept.DepartmentName.Contains(searchTerm) || project.ProjectName.Contains(searchTerm) || string.IsNullOrEmpty(searchTerm)
+                              where string.IsNullOrEmpty(searchTerm) ||
+                                    emp.FirstName.Contains(searchTerm) ||
+                                    emp.LastName.Contains(searchTerm) ||
+                                    emp.Email.Contains(searchTerm) ||
+                                    dept.DepartmentName.Contains(searchTerm) ||
+                                    project.ProjectName.Contains(searchTerm)
                               select new
-                                {
-                                    emp.FirstName,
-                                    emp.LastName,
-                                    emp.Email,
-                                    emp.Gender,                       
-                                    DepartmentName = dept.DepartmentName,
-                                    ProjectName = project.ProjectName,
-                                    startdate = project.StartDate != null ? project.StartDate.ToString("dd/mm/yyyy") : null,
-                                    enddate = project.EndDate != null ? project.EndDate.ToString("dd/mm/yyyy") : null,
-
-                                  
-
+                              {
+                                  emp.FirstName,
+                                  emp.LastName,
+                                  emp.Email,
+                                  emp.Gender,
+                                  emp.JobTitle, 
+                                  DepartmentName = dept.DepartmentName,
+                                  ProjectName = project.ProjectName,
+                                  StartDate = project.StartDate.HasValue ? project.StartDate.Value.ToString("dd/MM/yyyy") : null,
+                                  EndDate = project.EndDate.HasValue ? project.EndDate.Value.ToString("dd/MM/yyyy") : null
                               }).ToListAsync<object>();
             return data;
         }
-
 
         public async Task<Employee> UpdateEmployee(Employee employee)
         {
@@ -92,14 +93,10 @@ namespace EmployeeAPI.Repository
             existingEmployee.Email = employee.Email;
             existingEmployee.Gender = employee.Gender;
             existingEmployee.DepartmentID = employee.DepartmentID;
-            
-
-
+            existingEmployee.JobTitle = employee.JobTitle; 
 
             await _context.SaveChangesAsync();
             return existingEmployee;
         }
-
-        
     }
 }

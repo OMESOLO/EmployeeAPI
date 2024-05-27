@@ -11,5 +11,7 @@ namespace EmployeeAPI.Entity
         public string Gender { get; set; } = string.Empty;
         public int DepartmentID {  get; set; }
 
+        public string JobTitle { get; set; }
+
     }
 }

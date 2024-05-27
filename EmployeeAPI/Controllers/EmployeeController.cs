@@ -4,6 +4,7 @@ using EmployeeAPI.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace EmployeeAPI.Controllers
 {
@@ -20,53 +21,86 @@ namespace EmployeeAPI.Controllers
             _employeeService = employeeService;
         }
 
-       
-
         [HttpGet("GetEmployee")]
-        public async Task<ActionResult<List<object>>> GetEmployee()
+        public async Task<ActionResult> GetEmployee()
         {
-            var result = await _employeeService.GetEmployeeList();
-            return Ok(result);
+            try
+            {
+                var result = await _employeeService.GetEmployeeList();
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpPost("AddEmployee")]
-        public async Task<ActionResult<Employee>> AddEmployee(Employee employee)
+        public async Task<ActionResult> AddEmployee(Employee employee)
         {
-            var addedEmployee = await _employeeService.AddEmployee(employee);
-            return Ok(addedEmployee);
+            try
+            {
+                var addedEmployee = await _employeeService.AddEmployee(employee);
+                return Ok(addedEmployee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-        [HttpDelete("DeleteEmployee")]
-        public async Task<ActionResult<Employee>> DeleteEmployee(int employeeId)
+        [HttpDelete("DeleteEmployee/{employeeId}")]
+        public async Task<ActionResult> DeleteEmployee(int employeeId)
         {
-            var deletedEmployee = await _employeeService.DeleteEmployee(employeeId);
-            if (deletedEmployee == null)
+            try
             {
-                return NotFound();
+                var deletedEmployee = await _employeeService.DeleteEmployee(employeeId);
+                if (deletedEmployee == null)
+                {
+                    return NotFound();
+                }
+                return Ok(deletedEmployee);
             }
-
-            return Ok(deletedEmployee);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
         [HttpGet("SearchEmployee")]
-        public async Task<ActionResult<List<object>>> SearchEmployee(string searchTerm)
+        public async Task<ActionResult> SearchEmployee(string searchTerm)
         {
-            var searchResult = await _employeeService.SearchEmployee(searchTerm);
-            return Ok(searchResult);
-        }
-
-        [HttpPut("UpdateEmployee")]
-        public async Task<ActionResult<Employee>> UpdateEmployee(Employee employee)
-        {
-            var updatedEmployee = await _employeeService.UpdateEmployee(employee);
-            if (updatedEmployee == null)
+            try
             {
-                return NotFound();
+                var searchResult = await _employeeService.SearchEmployee(searchTerm);
+                return Ok(searchResult);
             }
-
-            return Ok(updatedEmployee);
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
         }
 
-
+        [HttpPut("UpdateEmployee/{id}")]
+        public async Task<ActionResult> UpdateEmployee(int id, Employee employee)
+        {
+            try
+            {
+                if (id != employee.EmployeeID)
+                {
+                    return BadRequest("Employee ID mismatch");
+                }
+                var updatedEmployee = await _employeeService.UpdateEmployee(employee);
+                if (updatedEmployee == null)
+                {
+                    return NotFound();
+                }
+                return Ok(updatedEmployee);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
+            }
+        }
     }
 }

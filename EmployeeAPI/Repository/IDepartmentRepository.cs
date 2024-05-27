@@ -8,7 +8,7 @@ namespace EmployeeAPI.Repository
         Task<List<object>> GetDepartmentID(int id);
         Task<Department> DeleteDepartment(int departmentID);
         Task<List<object>> SearchDepartment(string searchdep);
-        Task<Department> UpdateDepartment(Department department);
+        Task<Department> UpdateDepartment(int id, Department department);
         Task<Department> AddDepartment(Department addDepartment);
     }
 }
