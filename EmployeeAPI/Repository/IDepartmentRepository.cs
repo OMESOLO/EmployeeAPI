@@ -9,6 +9,6 @@ namespace EmployeeAPI.Repository
         Task<Department> DeleteDepartment(int departmentID);
         Task<List<object>> SearchDepartment(string searchdep);
         Task<Department> UpdateDepartment(int id, Department department);
-        Task<Department> AddDepartment(Department addDepartment);
+        Task<IEnumerable<Department>> AddDepartments(IEnumerable<Department> departments);
     }
 }

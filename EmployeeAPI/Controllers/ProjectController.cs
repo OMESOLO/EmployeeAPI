@@ -27,10 +27,15 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPost("AddProject")]
-        public async Task<ActionResult<Project>> AddProject(Project project)
+        public async Task<IActionResult> AddProjects([FromBody] IEnumerable<Project> projects)
         {
-            var addProject = await _projectService.AddProject(project);
-            return Ok(addProject);
+            if (projects == null || !projects.Any())
+            {
+                return BadRequest("Invalid input.");
+            }
+
+            await _projectService.AddProjects(projects);
+            return Ok("Projects added successfully.");
         }
 
         [HttpDelete("DeleteProject/{projectId}")]

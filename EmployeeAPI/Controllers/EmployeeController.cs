@@ -36,18 +36,20 @@ namespace EmployeeAPI.Controllers
         }
 
         [HttpPost("AddEmployee")]
-        public async Task<ActionResult> AddEmployee(Employee employee)
+        public async Task<ActionResult> AddEmployees(List<Employee> employees)
         {
             try
             {
-                var addedEmployee = await _employeeService.AddEmployee(employee);
-                return Ok(addedEmployee);
+                await _employeeService.AddEmployee(employees);
+                return Ok(employees);
             }
             catch (Exception ex)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, ex.Message);
             }
         }
+
+
 
         [HttpDelete("DeleteEmployee/{employeeId}")]
         public async Task<ActionResult> DeleteEmployee(int employeeId)

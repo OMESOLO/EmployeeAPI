@@ -42,10 +42,12 @@ namespace EmployeeAPI.Service
             return updatedepartment;
         }
 
-        public async Task AddDepartment(Department addDepartment)
+        public async Task AddDepartments(IEnumerable<Department> departments)
         {
-            await _departmentRepository.AddDepartment(addDepartment);
+            await _departmentRepository.AddDepartments(departments);
         }
-        
+
+
+
     }
 }

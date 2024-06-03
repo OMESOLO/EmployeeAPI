@@ -34,12 +34,13 @@ namespace EmployeeAPI.Repository
             return data;
         }
 
-        public async Task<Employee> AddEmployee(Employee employee)
+        public async Task<List<Employee>> AddEmployee(List<Employee> employees)
         {
-            _context.Employees.Add(employee);
+            _context.Employees.AddRange(employees);
             await _context.SaveChangesAsync();
-            return employee;
+            return employees;
         }
+
 
         public async Task<Employee> DeleteEmployee(int employeeId)
         {

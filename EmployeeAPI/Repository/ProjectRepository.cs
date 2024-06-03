@@ -28,12 +28,16 @@ namespace EmployeeAPI.Repository
             return data;
         }
 
-        public async Task<Project> AddProject(Project project)
+        public async Task<IEnumerable<Project>> AddProjects(IEnumerable<Project> projects)
         {
-            _context.Projects.Add(project);
+            foreach (var project in projects)
+            {
+                _context.Projects.Add(project);
+            }
             await _context.SaveChangesAsync();
-            return project;
+            return projects;
         }
+
 
         public async Task<Project> DeleteProject(int id)
         {

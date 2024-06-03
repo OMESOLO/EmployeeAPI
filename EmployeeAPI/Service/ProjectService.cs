@@ -18,11 +18,11 @@ namespace EmployeeAPI.Service
             
         }
 
-        public async Task<Project> AddProject(Project project)
+        public async Task AddProjects(IEnumerable<Project> projects)
         {
-            var addproject = await _projectRepository.AddProject(project);
-            return addproject;
+            await _projectRepository.AddProjects(projects);
         }
+
 
         public async Task<Project> DeleteProject(int id)
         {

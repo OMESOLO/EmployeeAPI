@@ -89,12 +89,16 @@ namespace EmployeeAPI.Repository
 
 
 
-        public async Task<Department> AddDepartment(Department addDepartment)
-        {   
-            _context.Departments.Add(addDepartment);
+        public async Task<IEnumerable<Department>> AddDepartments(IEnumerable<Department> departments)
+        {
+            foreach (var department in departments)
+            {
+                _context.Departments.Add(department);
+            }
             await _context.SaveChangesAsync();
-            return addDepartment;
+            return departments;
         }
+
 
     }
 }

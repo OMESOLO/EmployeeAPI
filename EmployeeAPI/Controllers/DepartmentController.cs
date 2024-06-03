@@ -74,14 +74,17 @@ namespace EmployeeAPI.Controllers
 
 
         [HttpPost("AddDepartment")]
-        public async Task<ActionResult<Department>> AddDepartment(Department addDepartment)
+        public async Task<IActionResult> AddDepartments([FromBody] IEnumerable<Department> departments)
         {
-            
+            if (departments == null || !departments.Any())
+            {
+                return BadRequest("Invalid input.");
+            }
 
-            await _departmentService.AddDepartment(addDepartment);
-            return Ok("Successfully");
+            await _departmentService.AddDepartments(departments);
+            return Ok("Departments added successfully.");
         }
-       
-        
+
+
     }
 }

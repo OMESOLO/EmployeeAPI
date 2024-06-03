@@ -17,10 +17,9 @@ namespace EmployeeAPI.Service
             return employeeList;
         }
 
-        public async Task<Employee> AddEmployee(Employee employee)
+        public async Task<List<Employee>> AddEmployee(List<Employee> employees)
         {
-            var addedEmployee = await _employeeRepository.AddEmployee(employee);
-            return addedEmployee;
+            return await _employeeRepository.AddEmployee(employees);
         }
 
         public async Task<Employee> DeleteEmployee(int employeeId)
